@@ -30,21 +30,25 @@ def about(request):
     return render(request, 'shop/about.html')
 
 def contact(request):
-    return HttpResponse("Contact Us")
-    # return render(request, 'shop/index.html')
+    # return HttpResponse("Contact Us")
+    return render(request, 'shop/contact.html')
 
 def tracker(request):
-    return HttpResponse("Tracker Status")
-    # return render(request, 'shop/index.html')
+    # return HttpResponse("Tracker Status")
+    return render(request, 'shop/tracker.html')
 
 def search(request):
-    return HttpResponse("Search")
-    # return render(request, 'shop/index.html')
+    # return HttpResponse("Search")
+    return render(request, 'shop/search.html')
 
-def productview(request):
-    return HttpResponse("Product View")
-    # return render(request, 'shop/index.html')
+def productview(request, myid):
+    # return HttpResponse("Product View")
+    # Fetch the product using the id
+    product = Product.objects.filter(id=myid)
+    # print(product)
+    return render(request, 'shop/prodview.html', {'product':product[0]})
+    
 
 def checkout(request):
-    return HttpResponse("Check Out")
-    # return render(request, 'shop/index.html')
+    # return HttpResponse("Check Out")
+    return render(request, 'shop/checkout.html')
