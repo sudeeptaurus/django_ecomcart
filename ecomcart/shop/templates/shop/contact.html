@@ -29,3 +29,11 @@
 </div>
 
 {% endblock %}
+
+{% block js %} 
+<script>
+{% if thank %}
+    alert('We have received your Query. We will get back to you soon! ');
+{% endif %}
+</script>
+{% endblock %}

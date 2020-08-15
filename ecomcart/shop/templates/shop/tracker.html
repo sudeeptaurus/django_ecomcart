@@ -1,4 +1,114 @@
 {% extends 'shop/basic.html' %}
 
-{% block title %} Tracker {% endblock %}
-{% block body %} This is Body of Tracker {% endblock %}
+{% block title %} E Com Cart Tracker {% endblock %}
+{% block body %}
+
+<div class="container">
+    <div class="col my-4">
+        <h2>Enter Your Order ID and Email Address to Track Your Order</h2>
+        <form method="post" action="#" id="trackerForm">{% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputname">Order ID</label>
+                    <input type="text" class="form-control" id="orderId" name="orderId" placeholder="Order ID">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="EMail">
+                </div>
+                <button type="submit" class="btn btn-primary">Track Order</button>
+            </div>
+        </form>
+    </div>
+    <div class="col my-4">
+        <h2>Your Order Status</h2>
+        <div class="my-4">
+            <ul class="list-group" id="items">
+                Enter Your Order ID and Email Address to Track Your Order
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    $('#trackerForm').submit(function(event) {
+
+        $('#items').empty();
+        var formData = {
+            'orderId': $('input[name=orderId]').val(),
+            'email': $('input[name=email]').val(),
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/shop/tracker/',
+            data: formData,
+            encode: true
+        })
+
+        .done(function(data) {
+            console.log(data)
+            updates = JSON.parse(data);
+            if (updates.length>0 & updates!={}){
+            
+            for (i=0; i<updates.length; i++) {
+                let text = updates[i]['text'];
+                let time = updates[i]['time'];
+                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                            ${text}
+                            <span class="badge badge-primary badge-pill">${time}</span>
+                        </li>`
+                $('#items').append(mystr);
+            }
+        }
+        else{
+            mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">Sorry, We are not able to fetch your order status. Kindly check your order id and email</li>`
+            $('#items').append(mystr);
+        }
+        });
+    event.preventDefault();
+
+    });
+
+
+    // if (localStorage.getItem('cart') == null) {
+    //     var cart = {};
+    // }
+    // else {
+    //     cart = JSON.parse(localStorage.getItem('cart'));
+
+    // }
+    // console.log(cart);
+
+    // var sum = 0;
+    // if ($.isEmptyObject(cart)) {
+    //     // if object is empty
+    //     mystr = `<p>Your Cart is Empty. Please add Items!</p>`
+    //     $('#items').append(mystr);
+    // }
+    // else {
+    //     for (item in cart) {
+    //         let name = cart[item][1];
+    //         let qty = cart[item][0];
+    //         sum = sum + qty;
+    //         mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+    //     ${name}
+    //     <span class="badge badge-primary badge-pill">${qty}</span>
+    // </li>`
+    //         $('#items').append(mystr);
+    //     }
+    // }
+    // document.getElementById('cart').innerHTML = sum;
+    // $('#itemsJson').val(JSON.stringify(cart));
+    // {% if thank %}
+    // alert('Thanks for ordering with us. Your order id is {{id}}. Use it to track your order using our tracker ');
+    // localStorage.clear();
+    // document.location = "/shop";
+    // {% endif %}
+</script>
+
+{% endblock %}
