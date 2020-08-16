@@ -10,6 +10,12 @@
             <ul class="list-group" id="items">
 
             </ul>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mt-3">
+                    <li class="breadcrumb-item active" aria-current="page">Your Cart Total Price is <b>Rs. <span id="totalPrice"></b></span>. Thanks for Shopping with Us!
+                    </li>
+                </ol>
+            </nav>
         </div>
     </div>
     <div class="col my-4">
@@ -32,25 +38,26 @@
             </div>
             <div class="form-group">
                 <label for="inputAddress2">Address Line 2</label>
-                <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment, studio, or floor">
+                <input type="text" class="form-control" id="address2" name="address2"
+                    placeholder="Apartment, studio, or floor">
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputCity">City</label>
-                    <input type="text" class="form-control" id="city" name="city" >
+                    <input type="text" class="form-control" id="city" name="city">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="inputState">State</label>
-                    <input type="text" class="form-control" id="state" name="state" >
+                    <input type="text" class="form-control" id="state" name="state">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="inputZip">Zip</label>
-                    <input type="text" class="form-control" id="zip_code" name="zip_code" >
+                    <input type="text" class="form-control" id="zip_code" name="zip_code">
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputPhone">Phone Number</label>
-                <input type="tel" class="form-control" id="phone" name="phone" >
+                <input type="tel" class="form-control" id="phone" name="phone">
             </div>
             <button type="submit" class="btn btn-primary">Place Order</button>
         </form>
@@ -71,6 +78,7 @@
     console.log(cart);
 
     var sum = 0;
+    var totalPrice = 0;
     if ($.isEmptyObject(cart)) {
         // if object is empty
         mystr = `<p>Your Cart is Empty. Please add Items!</p>`
@@ -80,7 +88,9 @@
         for (item in cart) {
             let name = cart[item][1];
             let qty = cart[item][0];
+            let itemPrice = cart[item][2];
             sum = sum + qty;
+            totalPrice = totalPrice + qty* itemPrice;
             mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
         ${name}
         <span class="badge badge-primary badge-pill">${qty}</span>
@@ -89,6 +99,7 @@
         }
     }
     document.getElementById('cart').innerHTML = sum;
+    document.getElementById('totalPrice').innerHTML = totalPrice;
     $('#itemsJson').val(JSON.stringify(cart));
     {% if thank %}
     alert('Thanks for ordering with us. Your order id is {{id}}. Use it to track your order using our tracker ');
